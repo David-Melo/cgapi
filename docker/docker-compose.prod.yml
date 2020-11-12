@@ -21,7 +21,7 @@ services:
     ports:
       - 2021:27017
     volumes:
-      - ../data/mongo:/bitnami
+      - ../data/mongo:/bitnami/mongodb
     environment:
       MONGODB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
       MONGODB_USERNAME: ${MONGO_USER}
