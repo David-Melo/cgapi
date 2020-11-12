@@ -1,0 +1,31 @@
+version: '3.6'
+
+services:
+
+  mongodb:
+    image: bitnami/mongodb:latest
+    restart: always
+    ports:
+      - 2021:27017
+    volumes:
+      - ../data/mongo:/bitnami
+    environment:
+      MONGODB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
+      MONGODB_USERNAME: ${MONGO_USER}
+      MONGODB_PASSWORD: ${MONGO_PASS}
+      MONGODB_DATABASE: ${MONGO_DB}
+
+  postgres:
+    image: postgres:12
+    restart: always
+    ports:
+      - 2022:5432
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_ADMIN}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASS}
+      HASURA_POSTGRES_USER: ${POSTGRES_API_USER}
+      HASURA_POSTGRES_PASS: ${POSTGRES_API_PASS}
