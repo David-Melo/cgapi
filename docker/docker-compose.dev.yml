@@ -1,14 +1,20 @@
 version: '3.6'
 
+networks:
+  api:
+    driver: bridge
+
 services:
 
-  mongodb:
+  mongo:
     image: bitnami/mongodb:latest
     restart: always
     ports:
       - 2021:27017
     volumes:
-      - ../data/mongo:/bitnami
+      - ../data/mongo:/bitnami/mongodb
+    networks:
+      - api
     environment:
       MONGODB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
       MONGODB_USERNAME: ${MONGO_USER}
@@ -23,9 +29,23 @@ services:
     volumes:
       - ../data/postgres:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - api
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_ADMIN}
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASS}
-      HASURA_POSTGRES_USER: ${POSTGRES_API_USER}
-      HASURA_POSTGRES_PASS: ${POSTGRES_API_PASS}
+      POSTGRES_API_USER: ${POSTGRES_API_USER}
+      POSTGRES_API_PASS: ${POSTGRES_API_PASS}
+
+  redis:
+    image: bitnami/redis:latest
+    restart: always
+    ports:
+      - 2023:6379
+    volumes:
+      - ../data/redis:/bitnami/redis
+    networks:
+      - api
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASS}

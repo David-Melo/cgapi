@@ -1,0 +1,30 @@
+{
+  "name": "jobs",
+  "version": "0.0.1",
+  "description": "CG Jobs Worker",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "compile": "tsc",
+    "dev": "nodemon --watch '*.ts' --exec 'ts-node' src/index.ts",
+    "taskforce": "taskforce -n 'jobs' --token a2f0b099-a6fa-4520-915b-bd3d9f5e1517 --passwd cgapi90008264a --port 2023"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^14.14.7",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "bullmq": "^1.10.0",
+    "dotenv": "^8.2.0",
+    "knex": "^0.21.12",
+    "objection": "^2.2.3",
+    "pg": "^8.5.1"
+  }
+}
