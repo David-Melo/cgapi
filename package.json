@@ -1,0 +1,36 @@
+{
+    "name": "root",
+    "version": "0.0.1",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "@release-it/bumper": "^2.0.0",
+        "release-it": "^14.2.1",
+        "release-it-yarn-workspaces": "^2.0.0",
+        "wsrun": "^5.2.4"
+    },
+    "scripts": {
+        "dev": "yarn wsrun dev",
+        "release": "release-it"
+    },
+    "release-it": {
+        "github": {
+            "release": true,
+            "changelog": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
+        },
+        "npm": false,
+        "plugins": {
+            "release-it-yarn-workspaces": {
+                "skipChecks": true,
+                "publish": false
+            },
+            "@release-it/bumper": {
+                "out": [
+                    "README.md"
+                ]
+            }
+        }
+    }
+}

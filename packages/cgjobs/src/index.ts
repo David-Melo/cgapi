@@ -1,5 +1,9 @@
 import { Queue, QueueEvents, QueueOptions, QueueBaseOptions, Worker } from 'bullmq';
+import dontenv from 'dotenv';
 import handler, { JobType } from './handler';
+import MyClass from 'cgcore';
+
+dontenv.config();
 
 const queueConfig: QueueBaseOptions = {
     connection: {
@@ -12,6 +16,8 @@ const queueConfig: QueueBaseOptions = {
 const queue = new Queue<JobType>('jobs', queueConfig);
 const worker = new Worker('jobs', handler, queueConfig);
 const queueEvents = new QueueEvents('jobs', queueConfig);
+
+let ok = new MyClass();
 
 queue.add( 'DBSync', { name: 'SecondRun' } );
 
