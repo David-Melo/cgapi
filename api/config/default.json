@@ -1,0 +1,24 @@
+{
+    "host": "localhost",
+    "port": 3030,
+    "public": "../public/",
+    "paginate": {
+        "default": 10,
+        "max": 50
+    },
+    "postgres": {
+        "client": "pg",
+        "connection": {
+            "host": "POSTGRES_HOST",
+            "port": "POSTGRES_PORT",
+            "database": "POSTGRES_DB",
+            "user": "POSTGRES_API_USER",
+            "password": "POSTGRES_API_PASS"
+        }
+    },
+    "redis": {
+        "host": "REDIS_HOST",
+        "port": "REDIS_PORT",
+        "password": "REDIS_PASS"
+    }
+}
