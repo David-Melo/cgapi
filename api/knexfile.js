@@ -1,9 +1,6 @@
-import Knex from "knex";
-import dotenv from "dotenv";
+require('dotenv').config();
 
-dotenv.config();
-
-const KnexConfig: Knex.Config = {
+const KnexConfig = {
   client: 'pg',
   connection: {
     host: process.env.POSTGRES_HOST,
@@ -13,9 +10,8 @@ const KnexConfig: Knex.Config = {
     password: process.env.POSTGRES_API_PASS
   },
   migrations: {
-    tableName: 'migrations',
-    extension: 'ts'
+    tableName: 'migrations'
   }
 }
 
-export default KnexConfig;
+module.exports = KnexConfig;

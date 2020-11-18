@@ -16,17 +16,21 @@
   "license": "ISC",
   "scripts": {
     "dev": "ts-node-dev --no-notify --poll src/",
-    "compile": "shx rm -rf lib/ && tsc",    
+    "compile": "shx rm -rf lib/ && tsc",
     "start": "yarn run compile && node dist/",
-    "taskforce": "taskforce -n 'jobs' --token a2f0b099-a6fa-4520-915b-bd3d9f5e1517 --passwd cgapi90008264a --port 2023"
+    "taskforce": "taskforce -n 'jobs' --token a2f0b099-a6fa-4520-915b-bd3d9f5e1517 --passwd cgredis90008264a --port 2023"
   },
   "dependencies": {
+    "@feathersjs/feathers": "^4.5.8",
+    "@feathersjs/socketio-client": "^4.5.8",
     "axios": "^0.21.0",
     "bullmq": "^1.10.0",
     "dotenv": "^8.2.0",
     "knex": "^0.21.12",
     "objection": "^2.2.3",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "socket.io-client": "^2.3.0",
+    "throng": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.7",

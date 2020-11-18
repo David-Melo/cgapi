@@ -32,8 +32,6 @@ services:
     networks:
       - api
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_ADMIN}
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASS}
       POSTGRES_API_USER: ${POSTGRES_API_USER}
       POSTGRES_API_PASS: ${POSTGRES_API_PASS}

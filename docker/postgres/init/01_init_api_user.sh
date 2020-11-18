@@ -3,9 +3,9 @@ set -e
 
 POSTGRES_API_USER=${POSTGRES_API_USER:-pgapiuser}
 POSTGRES_API_PASS=${POSTGRES_API_PASS:-pgapiuserpass}
-POSTGRES_DB=${POSTGRES_DB:-default}
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" -v user="$POSTGRES_API_USER" -v pass="$POSTGRES_API_PASS" -v db="$POSTGRES_DB" <<-EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "postgres" --dbname "postgres" -v user="$POSTGRES_API_USER" -v pass="$POSTGRES_API_PASS" -v db="postgres" <<-EOSQL
     CREATE USER :user WITH ENCRYPTED PASSWORD :'pass';
     GRANT ALL PRIVILEGES ON DATABASE :db TO :user;
 EOSQL

@@ -16,14 +16,7 @@ export default {
         all: [],
         find: [],
         get: [], 
-        create: [
-            async ({ app, result }: HookContext<Testing>) => {
-                await app.service('queue').create({
-                    name: result.name,
-                    data: result
-                });
-            }
-        ],
+        create: [],
         update: [],
         patch: [],
         remove: []

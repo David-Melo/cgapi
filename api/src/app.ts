@@ -46,7 +46,7 @@ app.use('/', express.static(app.get('public')));
 // Set up Plugins and providers
 app.configure(express.rest());
 // Setup Socket
-//app.configure(socketio());
+app.configure(socketio());
 // Setup Objection ORM
 app.configure(objection);
 // Configure other middleware (see `middleware/index.js`)
@@ -54,7 +54,7 @@ app.configure(middleware);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Set up event channels (see channels.js)
-//app.configure(channels);
+app.configure(channels);
 // Set up Auth
 //app.configure(auth);
 

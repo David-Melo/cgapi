@@ -1,5 +1,5 @@
 import { ServiceMethods, Params, NullableId } from '@feathersjs/feathers';
-import { Queue, QueueBaseOptions, Job, JobsOptions } from 'bullmq';
+import { Queue, QueueBaseOptions, Job, JobsOptions, QueueScheduler  } from 'bullmq';
 import { setQueues } from "bull-board";
 
 import { Application } from "../../declarations";
@@ -17,12 +17,13 @@ type FindJobsParams = {
 type CreateJobInput = {
     name: string;
     data: object;
-    opts?: JobsOptions
+    opts?: JobsOptions 
 }
 
 export class JobQueue implements ServiceMethods<any> {
 
     queue: Queue;
+    scheduler: QueueScheduler;
 
     async find(params: FindJobsParams) {
         const jobTypes: JobTypes[] = [
@@ -46,19 +47,31 @@ export class JobQueue implements ServiceMethods<any> {
 
     setup(app: Application, path: string) {
 
-        let { host, port, password} = app.get('redis');
+        let { host, port, password } = app.get('redis');
 
-        const queueConfig: QueueBaseOptions = {
-            connection: {
-                host: host, 
-                port:  port, 
-                password: password
+        const getConfig = (connectionName: string) => {
+            const queueConfig: QueueBaseOptions = {
+                connection: {
+                    connectionName,
+                    host: host, 
+                    port:  port, 
+                    password: password
+                }
             }
-        }    
+            return queueConfig;
+        }  
 
-        this.queue = new Queue('jobs', queueConfig);
+        
+        this.queue = new Queue('jobs', getConfig('MainQueueHandler'));
+        this.scheduler = new QueueScheduler('jobs', getConfig('QueueScheduler'));
 
         setQueues([this.queue]);
+
+        this.queue.add(
+            'repeat', 
+            { name: 'name' },
+            { repeat: { every: 30000 } }
+        );
 
     }
 
