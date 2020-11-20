@@ -13,57 +13,64 @@ O_RD
 
 let generic = {
     field_sysid: [
-        '',
-        ''
+        'sysid',
+        'ListingKey'
     ],
     field_157: [
-        'ML#',
-        ''
+        'MLS#',
+        'ListingId'
     ],
     field_264: [
         'FolioNumber',
-        ''
+        'ParcelNumber'
     ],
     field_131: [
         'LastTransactionDate',
-        ''
+        'ModificationTimestamp'
     ],
     field_214: [
         'Remarks',
-        ''
+        'PublicRemarks'
     ],
     field_137: [
         'ListPrice',
-        ''
+        'ListPrice'
     ],
     field_314: [
         'YearBuilt',
-        ''
+        'YearBuilt'
     ],
     field_881: [
         'Address',
-        ''
+        'UnparsedAddress'
     ],
     field_922: [
         'City',
-        ''
+        'City'
     ],
     field_924: [
         'State',
-        ''
+        'StateOrProvince'
     ],
     field_10: [
         'Zip',
-        ''
+        'PostalCode'
     ],
     field_61: [
         'County',
-        ''
+        'CountyOrParish'
     ],
     field_165: [
         'OfficeName',
-        ''
+        'ListOfficeName'
     ],
+    field_165: [
+        'Latitude',
+        'Longitude',
+        'lat',
+        'lng'
+    ],
+    
 }
 
 details.code = 'RE1';
@@ -74,71 +81,82 @@ details.parent = 'RES';
 let RE1 = {
     field_25: [
         'Beds',
-        ''
+        'BedroomsTotal'
     ],
     field_92: [
         'Baths',
-        ''
+        'BathroomsFull'
     ],
     field_261: [
         'TotalArea',
-        ''
+        'LivingArea'
     ],
     field_57: [
         'Cooling',
-        ''
+        'Cooling'
     ],
     field_232: [
         'PropArea',
-        ''
+        'LotSizeSquareFeet'
     ],
     field_191: [
         'Pool',
-        ''
+        'PoolPrivateYN'
     ],
     field_96: [
         'FloorDescription',
-        ''
+        'Flooring'
     ],
     field_220: [
         'RoomsDescription',
-        ''
+        'RoomLivingRoomFeatures',
+        'RoomDiningRoomFeatures',
+        'RoomBedroomFeatures',
+        'RoomMasterBathroomFeatures'
     ],
     field_116: [
         'InteriorFeatures',
-        ''
+        'InteriorFeatures',
+        'LaundryFeatures',
+        'WindowFeatures',
+        'SecurityFeatures'
     ],
     field_81: [
         'EquipmentAppliances',
-        ''
+        'Appliances'
     ],
     field_68: [
         'DesignDescription',
-        ''
+        'ArchitecturalStyle'
     ],
     field_87: [
         'ExteriorFeatures',
-        ''
+        'ExteriorFeatures',
+        'Fencing',
+        'PatioAndPorchFeatures',
+        'PoolFeatures',
+        'WaterfrontFeatures',
+        'CommunityFeatures'
     ],
     field_177: [
         'ParkingDescription',
-        ''
+        'ParkingFeatures'
     ],
     field_102: [
         'GarageSpaces',
-        ''
+        'GarageSpaces'
     ],
     field_141: [
         'LotDescription',
-        ''
+        'LotFeatures'
     ],
     field_111: [
         'AssociationType',
-        ''
+        'MIAMIRE_TypeofAssociation'
     ],
     field_93: [
         'AssociationFee',
-        ''
+        'AssociationFee'
     ],
 }
 
@@ -150,39 +168,42 @@ details.parent = 'RES';
 let RE2 = {
     field_25: [
         'Beds',
-        ''
+        'BedroomsTotal'
     ],
     field_92: [
         'Baths',
-        ''
+        'BathroomsFull'
     ],
     field_261: [
         'TotalArea',
-        ''
+        'LivingArea'
     ],
     field_57: [
         'Cooling',
-        ''
+        'Cooling'
     ],
     field_372: [
         'UnitDesign',
-        ''
+        'View',
+        'MIAMIRE_Style'
     ],
     field_364: [
         'Security Information',
-        ''
+        'SecurityFeatures'
     ],
     field_319: [
         'Amenities',
-        ''
+        'AssociationAmenities',
+        'MIAMIRE_MaintenanceIncludes',
+        'CommunityFeatures'
     ],
     field_111: [
         'AssociationType',
-        ''
+        'MIAMIRE_TypeofAssociation'
     ],
     field_93: [
-        'AssociationType',
-        ''
+        'AssociationFee',
+        'AssociationFee'
     ],
 }
 
@@ -196,51 +217,60 @@ details.parent = 'RES';
 let RNT1 = {
     field_25: [
         'Beds',
-        ''
+        'BedroomsTotal'
     ],
     field_92: [
         'Baths',
-        ''
+        'BathroomsFull'
     ],
     field_261: [
         'TotalArea',
-        ''
+        'LivingArea'
     ],
     field_57: [
         'Cooling',
-        ''
+        'Cooling'
     ],
     field_116: [
         'InteriorFeatures',
-        ''
+        'InteriorFeatures',
+        'LaundryFeatures',
+        'WindowFeatures',
+        'SecurityFeatures'
     ],
     field_578: [
         'RentPeriod',
-        ''
+        'LeaseAmountFrequency'
     ],
     field_562: [
         'AvailableDate',
-        ''
+        'AvailabilityDate'
     ],
     field_99: [
         'Furnished Info',
-        ''
+        'Furnished'
     ],
     field_588: [
         'Type of Property',
-        ''
+        'MIAMIRE_Style'
     ],
     field_567: [
         'Minimum Lease Period',
-        ''
+        'LeaseTerm'
     ],
     field_554: [
         'Application Fee',
         ''
     ],
     field_87: [
-        'Exterior Features',
-        ''
+        'ExteriorFeatures',
+        'ExteriorFeatures',
+        'Fencing',
+        'PatioAndPorchFeatures',
+        'PoolFeatures',
+        'WaterfrontFeatures',
+        'CommunityFeatures',
+        'MIAMIRE_SubdivisionInformation'
     ],
     field_570: [
         'Move In Dollars',
@@ -298,11 +328,13 @@ details.parent = 'COM';
 let COM = {
     field_662: [
         'StyleOfProperty',
-        ''
+        'CurrentUse',
+        'PossibleUse',
+        'BusinessType',
     ],
     field_594: [
         'Prop Type/Type of Building',
-        ''
+        'BusinessType'
     ],
 }
 
@@ -319,7 +351,9 @@ if(S(listing.field_544).contains('Agri')){
 let CLD = {
     field_531: [
         'Comprehensive Plan Use',
-        ''
+        'PossibleUse',
+        'BusinessType',
+        'CurrentUse'
     ],
     field_515: [
         'Jurisdiction',
@@ -327,19 +361,20 @@ let CLD = {
     ],
     field_545: [
         'Usage',
-        ''
+        'CurrentUse',
+        'BusinessType'
     ],
     field_455: [
         'Total Acreage',
-        ''
+        'LotSizeAcres'
     ],
     field_546: [
         'Utilities Available',
-        ''
+        'Utilities'
     ],
     field_526: [
         'On-Site Utilities',
-        ''
+        'Utilities'
     ],
 }
 
@@ -348,14 +383,18 @@ details.parent = 'COM';
 details.proptype = 'Residential Land';
 details.finance = 'BUY';
 field_477|Parcels;
+DevelopmentStatus
+CurrentUse
 
 details.code = 'BUS';
 details.proptype = 'Business';
 details.finance = 'BUY';
 details.parent = 'COM';
 field_748|Type of Business
+BusinessType
 field_732|Licenses
 field_756|Year Established
+YearEstablished
 
 details.code = 'RIN';
 details.proptype = 'Residential Income';
