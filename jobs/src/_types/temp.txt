@@ -1,0 +1,363 @@
+import { O_RDONLY } from "constants"
+
+RE1 Single Family PropertyType Residential PropertySubType Single Family Residence
+RE2 Condo/Co-Op/Villa/Townhouse PropertyType Residential Lease PropertySubType Condominium
+RNT Residential Rental PropertyType Residential Lease
+COM Commercial/Industrial
+RIN Residential Income PropertyType Residential Income
+CLD Commercial/Business/Agricultural/Industrial Land
+RLD Residential Land/Boat Docks
+BUS Business Opportunity
+
+O_RD
+
+let generic = {
+    field_sysid: [
+        '',
+        ''
+    ],
+    field_157: [
+        'ML#',
+        ''
+    ],
+    field_264: [
+        'FolioNumber',
+        ''
+    ],
+    field_131: [
+        'LastTransactionDate',
+        ''
+    ],
+    field_214: [
+        'Remarks',
+        ''
+    ],
+    field_137: [
+        'ListPrice',
+        ''
+    ],
+    field_314: [
+        'YearBuilt',
+        ''
+    ],
+    field_881: [
+        'Address',
+        ''
+    ],
+    field_922: [
+        'City',
+        ''
+    ],
+    field_924: [
+        'State',
+        ''
+    ],
+    field_10: [
+        'Zip',
+        ''
+    ],
+    field_61: [
+        'County',
+        ''
+    ],
+    field_165: [
+        'OfficeName',
+        ''
+    ],
+}
+
+details.code = 'RE1';
+details.proptype = 'Single Family Home';
+details.finance = 'BUY';
+details.parent = 'RES';
+
+let RE1 = {
+    field_25: [
+        'Beds',
+        ''
+    ],
+    field_92: [
+        'Baths',
+        ''
+    ],
+    field_261: [
+        'TotalArea',
+        ''
+    ],
+    field_57: [
+        'Cooling',
+        ''
+    ],
+    field_232: [
+        'PropArea',
+        ''
+    ],
+    field_191: [
+        'Pool',
+        ''
+    ],
+    field_96: [
+        'FloorDescription',
+        ''
+    ],
+    field_220: [
+        'RoomsDescription',
+        ''
+    ],
+    field_116: [
+        'InteriorFeatures',
+        ''
+    ],
+    field_81: [
+        'EquipmentAppliances',
+        ''
+    ],
+    field_68: [
+        'DesignDescription',
+        ''
+    ],
+    field_87: [
+        'ExteriorFeatures',
+        ''
+    ],
+    field_177: [
+        'ParkingDescription',
+        ''
+    ],
+    field_102: [
+        'GarageSpaces',
+        ''
+    ],
+    field_141: [
+        'LotDescription',
+        ''
+    ],
+    field_111: [
+        'AssociationType',
+        ''
+    ],
+    field_93: [
+        'AssociationFee',
+        ''
+    ],
+}
+
+details.code = 'RE2';
+details.proptype = 'Condo / Townhouse';
+details.finance = 'BUY';
+details.parent = 'RES';
+
+let RE2 = {
+    field_25: [
+        'Beds',
+        ''
+    ],
+    field_92: [
+        'Baths',
+        ''
+    ],
+    field_261: [
+        'TotalArea',
+        ''
+    ],
+    field_57: [
+        'Cooling',
+        ''
+    ],
+    field_372: [
+        'UnitDesign',
+        ''
+    ],
+    field_364: [
+        'Security Information',
+        ''
+    ],
+    field_319: [
+        'Amenities',
+        ''
+    ],
+    field_111: [
+        'AssociationType',
+        ''
+    ],
+    field_93: [
+        'AssociationType',
+        ''
+    ],
+}
+
+field_588|Type of Property
+details.code = 'RNT1';
+details.proptype = 'Single Family Home';
+details.code = 'RNT2';
+details.proptype = 'Condo / Townhouse';
+details.finance = 'RNT';
+details.parent = 'RES';
+let RNT1 = {
+    field_25: [
+        'Beds',
+        ''
+    ],
+    field_92: [
+        'Baths',
+        ''
+    ],
+    field_261: [
+        'TotalArea',
+        ''
+    ],
+    field_57: [
+        'Cooling',
+        ''
+    ],
+    field_116: [
+        'InteriorFeatures',
+        ''
+    ],
+    field_578: [
+        'RentPeriod',
+        ''
+    ],
+    field_562: [
+        'AvailableDate',
+        ''
+    ],
+    field_99: [
+        'Furnished Info',
+        ''
+    ],
+    field_588: [
+        'Type of Property',
+        ''
+    ],
+    field_567: [
+        'Minimum Lease Period',
+        ''
+    ],
+    field_554: [
+        'Application Fee',
+        ''
+    ],
+    field_87: [
+        'Exterior Features',
+        ''
+    ],
+    field_570: [
+        'Move In Dollars',
+        ''
+    ],
+}
+
+if( S(listing.field_662).contains('Income Non-Waterfront') || S(listing.field_662).contains('Income Waterfront') || S(listing.field_662).contains('Efficiency') || S(listing.field_662).contains('Multifamily') || S(listing.field_662).contains('Townhouse') ){
+    details.code = 'COMB1';
+    details.proptype = 'Multifamily';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Commercial Office') ) {
+    details.code = 'COMB2';
+    details.proptype = 'Office';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Industrial') ) {
+    details.code = 'COMB3';
+    details.proptype = 'Industrial';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Retail') ){
+    details.code = 'COMB4';
+    details.proptype = 'Retail';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Hotel Waterfront') || S(listing.field_662).contains('Hotel Non-Waterfront') ){
+    details.code = 'COMB5';
+    details.proptype = 'Hotel & Motel';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Special Purpose') ){
+    details.code = 'COMB6';
+    details.proptype = 'Special Purpose';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Mixed Use') ){
+    details.code = 'COMB7';
+    details.proptype = 'Mixed Use';
+    details.finance = 'BUY';
+
+} else if ( S(listing.field_662).contains('Industrial Lease') ){
+    details.code = 'COMR1';
+    details.proptype = 'Industrial';
+    details.finance = 'RNT';
+
+} else if ( S(listing.field_662).contains('Commercial Lease') ){
+    details.code = 'COMR2';
+    details.proptype = 'Office/Retail';
+    details.finance = 'RNT';
+
+}
+details.parent = 'COM';
+let COM = {
+    field_662: [
+        'StyleOfProperty',
+        ''
+    ],
+    field_594: [
+        'Prop Type/Type of Building',
+        ''
+    ],
+}
+
+field_544|TypeOfProp
+if(S(listing.field_544).contains('Agri')){
+    details.code = 'CLD2';
+    details.proptype = 'Agricultural';
+    details.finance = 'BUY';
+} else {
+    details.code = 'CLD1';
+    details.proptype = 'Land';
+    details.finance = 'BUY';
+}
+let CLD = {
+    field_531: [
+        'Comprehensive Plan Use',
+        ''
+    ],
+    field_515: [
+        'Jurisdiction',
+        ''
+    ],
+    field_545: [
+        'Usage',
+        ''
+    ],
+    field_455: [
+        'Total Acreage',
+        ''
+    ],
+    field_546: [
+        'Utilities Available',
+        ''
+    ],
+    field_526: [
+        'On-Site Utilities',
+        ''
+    ],
+}
+
+details.code = 'RLD';
+details.parent = 'COM';
+details.proptype = 'Residential Land';
+details.finance = 'BUY';
+field_477|Parcels;
+
+details.code = 'BUS';
+details.proptype = 'Business';
+details.finance = 'BUY';
+details.parent = 'COM';
+field_748|Type of Business
+field_732|Licenses
+field_756|Year Established
+
+details.code = 'RIN';
+details.proptype = 'Residential Income';
+details.finance = 'BUY';
+details.parent = 'COM';
