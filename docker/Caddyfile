@@ -7,4 +7,5 @@
 api.canerogroup.com {
     reverse_proxy :2021 mongo:2021
     reverse_proxy :2022 postgres:2022
+    reverse_proxy :2023 postgres:2023
 }
