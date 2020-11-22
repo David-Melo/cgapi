@@ -11,6 +11,7 @@ services:
     depends_on:
       - "mongo"
       - "postgres"
+      - "redis"
     restart: unless-stopped
     ports:
       - 80:80
@@ -35,6 +36,21 @@ services:
       MONGODB_USERNAME: ${MONGO_USER}
       MONGODB_PASSWORD: ${MONGO_PASS}
       MONGODB_DATABASE: ${MONGO_DB}
+
+  postgres:
+    image: postgres:12
+    restart: always
+    ports:
+      - 2022:5432
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - api
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASS}
+      POSTGRES_API_USER: ${POSTGRES_API_USER}
+      POSTGRES_API_PASS: ${POSTGRES_API_PASS}
 
   redis:
     image: bitnami/redis:latest
