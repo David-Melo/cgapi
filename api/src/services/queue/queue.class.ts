@@ -1,4 +1,4 @@
-import { ServiceMethods, Params, NullableId } from '@feathersjs/feathers';
+import { ServiceMethods, Params, NullableId, Id } from '@feathersjs/feathers';
 import { Queue, QueueBaseOptions, Job, JobsOptions, QueueScheduler  } from 'bullmq';
 import { setQueues } from "bull-board";
 
@@ -7,6 +7,7 @@ import { Application } from "../../declarations";
 type JobTypes = 'waiting' | 'active' | 'delayed' | 'completed' | 'failed';
 
 type FindJobsParams = {
+    queue: 'queries' | 'listings';
     type?: JobTypes;
     types?: JobTypes[];
     start?: number;
@@ -22,29 +23,6 @@ type CreateJobInput = {
 
 export class JobQueue implements ServiceMethods<any> {
 
-    queue: Queue;
-    scheduler: QueueScheduler;
-
-    async find(params: FindJobsParams) {
-        const jobTypes: JobTypes[] = [
-            'waiting',
-            'active',
-            'delayed',
-            'completed',
-            'failed'
-        ]
-        let query = params.type ? params.type : params.types ? params.types : jobTypes;
-        return this.queue.getJobs(query);
-    }
-
-    async get(id: string, params: Params) {
-        return Job.fromId(this.queue, id);
-    }
-
-    async create({ name, data, opts = {} } : CreateJobInput, params: Params) {
-        return this.queue.add(name, data, opts);
-    }
-
     setup(app: Application, path: string) {
 
         let { host, port, password } = app.get('redis');
@@ -59,27 +37,28 @@ export class JobQueue implements ServiceMethods<any> {
                 }
             }
             return queueConfig;
-        }  
-
+        }
         
-        this.queue = new Queue('jobs', getConfig('MainQueueHandler'));
-        this.scheduler = new QueueScheduler('jobs', getConfig('QueueScheduler'));
+        const QueryViewer = new Queue('queries', getConfig('QueryViewer'));
+        const ListingViewer = new Queue('listings', getConfig('ListingViewer'));
+        
+        const QueryScheduler = new QueueScheduler('queries', getConfig('QueryScheduler'));
+        const ListingScheduler = new QueueScheduler('listings', getConfig('ListingScheduler'));
 
-        setQueues([this.queue]);
+        setQueues([QueryViewer, ListingViewer]);
 
-        this.queue.add(
-            'repeat', 
-            { name: 'name' },
-            { repeat: { every: 30000 } }
-        );
+        // this.queues.queries.add(
+        //     'repeat', 
+        //     { name: 'name' },
+        //     { repeat: { every: 30000 } }
+        // );
 
-    }
-
-    getInstance() {
-        return this.queue;
     }
 
     // Not Implemented
+    async find(params: Params) {}
+    async get(id: Id, params: Params) {}
+    async create(data: any, params: Params) {}
     async update(id: NullableId, data: any, params: Params) {}
     async patch(id: NullableId, data: any, params: Params) {}
     async remove(id: NullableId, params: Params) {}

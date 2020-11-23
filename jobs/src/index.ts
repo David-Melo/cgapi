@@ -4,12 +4,17 @@ import feathers from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import { Queue, QueueEvents, QueueOptions, QueueBaseOptions, Worker, Processor, Job } from 'bullmq';
+import { ListingCode } from "./_types";
 
 dontenv.config();
 
 export type JobType = {
     name: string;
 }
+
+// 1. Daily Check For Each Active Items In Each Query Modified On That Date
+// 2. Check Will Find Lots Of Items
+// 3. Each Item Will Get Queued
 
 const getConfig = (connectionName: string) => {
     const queueConfig: QueueBaseOptions = {
@@ -25,6 +30,54 @@ const getConfig = (connectionName: string) => {
 }
 
 //const queueEvents = new QueueEvents('jobs', getConfig('EventListener'));
+
+const MasterHandler = async () => {
+
+    const log = (msg: string) => {
+        console.log(`[QueryHandler] - ${msg}`);
+    }
+
+    const QueryQueue = new Queue('queries', getConfig('QueryHandler'));
+
+    const asyncQuery = () => {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                return resolve(true);
+            },120000)
+        })
+    }
+
+    const QueryWorker = new Worker('queries', async (job: Job<JobType>) => {
+        log('Running: ' + JSON.stringify(job))
+        return await asyncQuery();
+    }, getConfig('QueryWorker'));
+
+    QueryWorker.on('drained', (job: Job) => {
+        log('Drained')
+    });
+    
+    QueryWorker.on('completed', (job: Job) => {
+        log(`Completed Job: ${job.name}`);
+    });
+    
+    QueryWorker.on('failed', (job: Job) => {
+        log(`Job Failed: ${job.name}`);
+    });
+
+    QueryQueue.add( 'DailyQuerySyncRE1', { name: 'RE1' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncRE2', { name: 'RE2' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncRNT', { name: 'RNT' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncCOM', { name: 'COM' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncCLD', { name: 'CLD' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncRLD', { name: 'RLD' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncBUS', { name: 'BUS' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncRIN', { name: 'RIN' }, { repeat: { every: 60000 } } );
+
+    process.on('beforeExit', () => {
+        console.log('Master cleanup.')
+    });
+
+}
 
 const handler = (id, disconnect) => {
 
@@ -74,6 +127,7 @@ const handler = (id, disconnect) => {
 }
 
 throng({
+    master: MasterHandler,
     worker: handler,
     count: 1
 });
