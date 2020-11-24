@@ -1,14 +1,24 @@
 // Initializes the `testing` service on path `/testing`
-import { ServiceAddons } from '@feathersjs/feathers';
+import { Service, ServiceAddons } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
-import { Testing } from './testing.class';
-import createModel from '../../models/testing.model';
-import hooks from './testing.hooks';
+import { Listings } from './listings.class';
+import createModel from '../../models/listings.model';
+import hooks from './listings.hooks';
+
+export type Listing = {
+    id?: string;
+    sysid: string;
+    mls: string;
+    status: string;
+    code: string;
+    created_at?: string;
+    updated_at?: string;
+}
 
 // Add this service to the service type index
 declare module '../../declarations' {
     interface ServiceTypes {
-        'testing': Testing & ServiceAddons<any>;
+        'listings': Service<Listing> & Listings
     }
 }
 
@@ -20,10 +30,10 @@ export default function (app: Application): void {
     };
 
     // Initialize our service with any options it requires
-    app.use('/testing', new Testing(options, app));
+    app.use('/listings', new Listings(options, app));
 
     // Get our initialized service so that we can register hooks
-    const service = app.service('testing');
+    const service = app.service('listings');
 
     service.hooks(hooks);
 

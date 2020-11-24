@@ -39,6 +39,7 @@ export const mapGenericFields = (item: RemoteItem, code: ListingCode, finance: L
         sysid: item.ListingKey,
         mls: item.ListingId,
         folio: item.ParcelNumber,
+        status: item.StandardStatus,
         updated: item.ModificationTimestamp,
         description: item.PublicRemarks,
         price: item.ListPrice,

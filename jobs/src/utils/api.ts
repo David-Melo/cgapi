@@ -50,10 +50,10 @@ export default class APIService {
                 }
 
                 if  ( count && next ) {
-                    self.queue.push({
-                        page: task.page + 1,
-                        url: next
-                    });
+                    // self.queue.push({
+                    //     page: task.page + 1,
+                    //     url: next
+                    // });
                 }
 
                 return callback();

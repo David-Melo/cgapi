@@ -4,12 +4,22 @@ import feathers from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import { Queue, QueueEvents, QueueOptions, QueueBaseOptions, Worker, Processor, Job } from 'bullmq';
-import { ListingCode } from "./_types";
+
+import { ProcessRE1Query, ProcessRE2Query, ProcessRNTQuery, ProcessCOMQuery, ProcessCLDQuery, ProcessRLDQuery, ProcessRINQuery, ProcessBUSQuery, QueryFunction } from "./utils/functions";
+import { ListingCode, ListingType } from "./_types";
 
 dontenv.config();
 
-export type JobType = {
-    name: string;
+type QueryFunctions = {
+    [key in ListingCode]: QueryFunction
+} 
+
+type QueryJobType = {
+    code: ListingCode;
+}
+
+type ListingJobType = {
+    listing: ListingType;
 }
 
 // 1. Daily Check For Each Active Items In Each Query Modified On That Date
@@ -29,63 +39,106 @@ const getConfig = (connectionName: string) => {
     return queueConfig;
 }
 
-//const queueEvents = new QueueEvents('jobs', getConfig('EventListener'));
-
-const MasterHandler = async () => {
+const QueryHandler = async () => {
 
     const log = (msg: string) => {
-        console.log(`[QueryHandler] - ${msg}`);
+        console.log(`[QueryHandler]: ${msg}`);
     }
 
-    const QueryQueue = new Queue('queries', getConfig('QueryHandler'));
+    const queryFunctions: QueryFunctions = {
+        'RE1': ProcessRE1Query,
+        'RE2': ProcessRE2Query,
+        'RNT': ProcessRNTQuery,
+        'COM': ProcessCOMQuery,
+        'CLD': ProcessCLDQuery,
+        'RLD': ProcessRLDQuery,
+        'RIN': ProcessRINQuery,
+        'BUS': ProcessBUSQuery,
+    }
 
-    const asyncQuery = () => {
-        return new Promise((resolve,reject)=>{
-            setTimeout(()=>{
-                return resolve(true);
-            },120000)
+    const QueryQueue = new Queue<QueryJobType>('queries', getConfig('QueryHandler'));
+    const ListingQueue = new Queue<ListingJobType>('listings', getConfig('ListingsDispatcher'));
+
+    QueryQueue.clean
+
+    const QueryWorker = new Worker<QueryJobType>('queries', async (job: Job<QueryJobType>) => {
+
+        let progress = 0;
+        let listingsProgressIncrement = 1;
+
+        const updateProgress = (increment: number) => {
+            progress = progress + increment;
+            job.updateProgress(progress);
+            log(`[${job.name}]: Progress - ${progress}/100`);
+        }
+
+        log(`[${job.name}]: Worker Started`);
+
+        updateProgress(5);
+
+        let queryFunction: QueryFunction = queryFunctions[job.data.code];
+
+        let queryListings = await queryFunction();
+
+        updateProgress(5);
+
+        log(`[${job.name}]: Queuing: ${queryListings.length} Listings`);
+
+        listingsProgressIncrement = 90 / queryListings.length;
+
+        queryListings.forEach(listing=>{
+            updateProgress(listingsProgressIncrement);
+            ListingQueue.add( 
+                `ListingSync${job.data.code}`,
+                { listing }, 
+                { 
+                    jobId: listing.sysid, 
+                    removeOnComplete: true,
+                    attempts: 3,
+                    backoff: {
+                        type: 'exponential',
+                        delay: 60000,
+                    }
+                }
+            );
         })
-    }
-
-    const QueryWorker = new Worker('queries', async (job: Job<JobType>) => {
-        log('Running: ' + JSON.stringify(job))
-        return await asyncQuery();
+        
     }, getConfig('QueryWorker'));
 
-    QueryWorker.on('drained', (job: Job) => {
-        log('Drained')
+    QueryWorker.on('drained', (job: Job<QueryJobType>) => {
+        log('Finished Running Pending Query')
     });
     
-    QueryWorker.on('completed', (job: Job) => {
-        log(`Completed Job: ${job.name}`);
+    QueryWorker.on('completed', (job: Job<QueryJobType>) => {
+        log(`[${job.name}]: Job Completed`);
     });
     
-    QueryWorker.on('failed', (job: Job) => {
-        log(`Job Failed: ${job.name}`);
+    QueryWorker.on('failed', (job: Job<QueryJobType>) => {
+        log(`[${job.name}]: Job Failed`);
     });
 
-    QueryQueue.add( 'DailyQuerySyncRE1', { name: 'RE1' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncRE2', { name: 'RE2' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncRNT', { name: 'RNT' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncCOM', { name: 'COM' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncCLD', { name: 'CLD' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncRLD', { name: 'RLD' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncBUS', { name: 'BUS' }, { repeat: { every: 60000 } } );
-    QueryQueue.add( 'DailyQuerySyncRIN', { name: 'RIN' }, { repeat: { every: 60000 } } );
+    QueryQueue.add( 'DailyQuerySyncRE1', { code: 'RE1' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncRE2', { code: 'RE2' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncRNT', { code: 'RNT' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncCOM', { code: 'COM' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncCLD', { code: 'CLD' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncRLD', { code: 'RLD' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncBUS', { code: 'BUS' }, { repeat: { every: 60000 } } );
+    // QueryQueue.add( 'DailyQuerySyncRIN', { code: 'RIN' }, { repeat: { every: 60000 } } );
 
     process.on('beforeExit', () => {
-        console.log('Master cleanup.')
+        log(`Clean Up`);
     });
 
 }
 
-const handler = (id, disconnect) => {
+const ListingHandler = (id, disconnect) => {
 
     const socket = io('http://localhost:3030', { transports: ['websocket'] });
     const app = feathers();
     app.configure(socketio(socket));
     
-    app.service('testing').on('created', message => console.log('New message created', message));
+    app.service('listings').on('created', message => console.log('New listing created', message));
 
     const workerId = `Worker${id}`;
 
@@ -95,14 +148,10 @@ const handler = (id, disconnect) => {
 
     log('started');
 
-    const worker = new Worker('jobs', async (job: Job<JobType>) => {
+    const worker = new Worker('listings', async (job: Job<ListingJobType>) => {
         log(`Started Job: ${job.name}`);
-        // let test = await Test.query().insert({
-        //     name: job.data.name
-        // });
-        // console.log(test);
-        app.service('testing').create({name:`${job.name} ${job.id}`});
-        return 'ok';
+        await app.service('listings').create(job.data.listing);
+        job.updateProgress(100);
     }, getConfig(workerId));
 
     worker.on('drained', (job: Job) => {
@@ -127,23 +176,7 @@ const handler = (id, disconnect) => {
 }
 
 throng({
-    master: MasterHandler,
-    worker: handler,
+    master: QueryHandler,
+    worker: ListingHandler,
     count: 1
 });
-
-// queueEvents.on('waiting', ({ jobId }) => {
-//     console.log(`A job with ID ${jobId} is waiting`);
-// });
-
-// queueEvents.on('active', ({ jobId, prev }) => {
-//     console.log(`Job ${jobId} is now active; previous status was ${prev}`);
-// });
-
-// queueEvents.on('completed', ({ jobId, returnvalue }) => {
-//     console.log(`${jobId} has completed and returned ${JSON.stringify(returnvalue)}`);
-// });
-
-// queueEvents.on('failed', ({ jobId, failedReason }) => {
-//     console.log(`${jobId} has failed with reason ${JSON.stringify(failedReason)}`);
-// });
