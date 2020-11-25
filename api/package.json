@@ -33,6 +33,7 @@
         "@feathersjs/feathers": "^4.5.3",
         "@feathersjs/socketio": "^4.5.8",
         "@feathersjs/transport-commons": "^4.5.8",
+        "algoliasearch": "^4.8.1",
         "axios": "^0.21.0",
         "bull-board": "1.0.0-alpha.10",
         "bullmq": "^1.10.0",

@@ -20,5 +20,10 @@
         "host": "REDIS_HOST",
         "port": "REDIS_PORT",
         "password": "REDIS_PASS"
+    },
+    "algolia": {
+        "appid": "ALGOLIA_APP_ID",
+        "key": "ALGOLIA_API_KEY",
+        "index": "ALGOLIA_INDEX"
     }
 }
