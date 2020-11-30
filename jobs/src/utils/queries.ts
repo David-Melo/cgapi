@@ -6,9 +6,6 @@ export const RE2Query = `
         PropertySubType eq 'Condominium' or     
         PropertySubType eq 'Dockominium' or 
         PropertySubType eq 'Hotel/Motel' or 
-        PropertySubType eq 'Mobile Home' or 
-        PropertySubType eq 'Stock Cooperative' or
-        PropertySubType eq 'Timeshare' or 
         PropertySubType eq 'Townhouse' or 
         PropertySubType eq 'Villa'
     )
@@ -18,7 +15,6 @@ export const RNTQuery = `
     PropertyType eq 'Residential Lease' and (
         PropertySubType eq 'Villa' or 
         PropertySubType eq 'Townhouse' or 
-        PropertySubType eq 'Stock Cooperative' or 
         PropertySubType eq 'Single Family Residence' or 
         PropertySubType eq 'Multi Family' or 
         PropertySubType eq 'Efficiency' or 

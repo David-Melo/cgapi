@@ -1,4 +1,13 @@
-import { RemoteBUSListing, RemoteCLDListing, RemoteCOMListing, RemoteListing, RemoteRE1Listing, RemoteRE2Listing, RemoteRIN, RemoteRINListing, RemoteRLDListing, RemoteRNTListing } from "_types";
+import { RemoteBUSListing, RemoteCLDListing, RemoteCOMListing, RemoteListing, RemoteListingID, RemoteRE1Listing, RemoteRE2Listing, RemoteRIN, RemoteRINListing, RemoteRLDListing, RemoteRNTListing } from "_types";
+
+type IDField = keyof RemoteListingID;
+export const IDFields: IDField[] = [
+    'PropertyType',
+    'PropertySubType',
+    'StandardStatus',
+    'ListingKey',
+    'ListingId'
+]
 
 type GenericField = keyof RemoteListing;
 export const GenericFields: GenericField[] = [

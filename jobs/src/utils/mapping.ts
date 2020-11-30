@@ -9,6 +9,8 @@ import {
     BUS, RemoteBUS, 
     Listing, 
     ListingCode,
+    RemoteListingID,
+    ListingID
 } from "_types";
 
 type RemoteItem = 
@@ -27,6 +29,15 @@ export const arrayHandler = (item: any): any[] => {
     if (Array.isArray(item)) return item;
     if (typeof item === 'object') return Object.values(item);
     return [];
+}
+
+export const mapIDFields = (item: RemoteListingID): ListingID => {
+    return {
+        proptype: item.PropertySubType || item.PropertyType,
+        sysid: item.ListingKey,
+        mls: item.ListingId,
+        status: item.StandardStatus,
+    }
 }
 
 export const mapGenericFields = (item: RemoteItem, code: ListingCode, finance: Listing["finance"], parent: Listing["parent"]): Listing => {
@@ -51,7 +62,7 @@ export const mapGenericFields = (item: RemoteItem, code: ListingCode, finance: L
         zip: item.PostalCode,
         county: item.CountyOrParish,
         office: item.ListOfficeName,
-        images: item.Media.map(item=>item.MediaURL),
+        images: item.Media && Array.isArray(item.Media) ? item.Media.map(item=>item.MediaURL): [],
         _geoloc: {
             lat: item.Latitude,
             lng: item.Longitude

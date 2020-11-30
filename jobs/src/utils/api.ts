@@ -45,6 +45,8 @@ export default class APIService {
                 
                 let { next, count, data } = await self.runQuery<T>(task.url);
                 
+                console.log('TotalCount:' + count)
+
                 if ( data.length ) {
                     workData = workData.concat(data);
                 }

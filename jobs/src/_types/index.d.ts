@@ -1,4 +1,12 @@
-export type ListingCode = 'RE1' | 'RE2' | 'RNT' | 'COM' | 'CLD' | 'RLD' | 'BUS' | 'RIN'
+export type ListingCode = 'CLEANUP' | 'RE1' | 'RE2' | 'RNT' | 'COM' | 'CLD' | 'RLD' | 'BUS' | 'RIN'
+
+export type RemoteListingID = {
+    PropertyType: string;
+    PropertySubType: string;
+    StandardStatus: string;
+    ListingKey: string;
+    ListingId: string;
+}
 
 export type RemoteListing = {
     PropertyType: string;
@@ -198,6 +206,13 @@ export type MetaFields = {
     objectId: number;
 }
 
+export type ListingID = {
+    status: string;
+    proptype: string;
+    sysid: string;
+    mls: string;
+}
+
 export type Listing = {
     model: ListingCode;
     code: ListingCode;
@@ -328,4 +343,4 @@ export type RIN = Listing & {
     association_fee: number | null;
 }
 
-export type ListingType = RE1 | RE2 | RNT | COM | CLD | RLD | BUS | RIN;
+export type ListingType = ListingID | RE1 | RE2 | RNT | COM | CLD | RLD | BUS | RIN;
