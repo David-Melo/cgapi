@@ -12,20 +12,22 @@ export default {
 
                 // Get Listing MetaData
                 let { sysid, mls, status, code } = context.data;
-                let listingData = { sysid, mls, status, code };
-
+                
                 // Check If Listing Exists
-                let listings = await context.app.service('listings').find({sysid: sysid}) as Paginated<Listing>;
+                let listings = await context.app.service('listings').find({ query: { sysid: sysid } }) as Paginated<Listing>;
 
-                if ( listings.total >= 1) {
+                if ( listings.total === 1) {
 
                     let id = listings.data[0].id;
 
-                    let updatedListing = await context.app.service('listings').patch(id, listingData, { listing: context.data });
+                    let updatedListing = await context.app.service('listings').patch(id, { status }, { listing: context.data });
 
                     context.result = updatedListing;
                     context.params.listing = false;
 
+                } 
+                else if ( listings.total > 1) {
+                    return Promise.reject(new Error(`Conflicting SYSID (Multiple Matches) [${sysid}]`));
                 } else {
 
                     // Set Request Params To Store Full Listing
@@ -44,12 +46,7 @@ export default {
             }
         ],
         update: [],
-        patch: [
-            (context: HookContext) => {
-                console.log('BeforePatch');
-                //console.log(context.params.listing);
-            }
-        ],
+        patch: [],
         remove: []
     },
 
@@ -58,19 +55,25 @@ export default {
         find: [],
         get: [], 
         create: [
-            (context: HookContext) => {
-                console.log('AfterCreate');
-                console.log(context.params.listing);
+            async (context: HookContext) => {
+                if (context.params.listing) {
+                    context.result = await context.app.service('algolia').create(context.params.listing);
+                }
             }
         ],
         update: [],
         patch: [
-            (context: HookContext) => {
-                console.log('AfterPatch');
-                //console.log(context.params.listing);
+            async (context: HookContext) => {
+                if (context.params.listing) {
+                    context.result = await context.app.service('algolia').update(context.params.listing.mls, context.params.listing);
+                }
             }
         ],
-        remove: []
+        remove: [
+            async (context: HookContext) => {
+                context.result = await context.app.service('algolia').remove(context.params.query.mls);
+            }
+        ]
     },
 
     error: {
