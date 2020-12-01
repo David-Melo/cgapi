@@ -3,7 +3,7 @@
 }
 
 api.canerogroup.com {
-    reverse_proxy / api:3030
+    reverse_proxy api:3030
 }
 
 api.canerogroup.com:2021 {
