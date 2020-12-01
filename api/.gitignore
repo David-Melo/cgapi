@@ -116,3 +116,4 @@ data/
 ############################
 google-api.json
 .env
+dist

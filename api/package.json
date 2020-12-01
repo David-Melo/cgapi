@@ -22,7 +22,7 @@
     "scripts": {
         "dev": "ts-node-dev --no-notify --poll src/",
         "compile": "shx rm -rf dist/ && tsc",
-        "start": "yarn run compile && node dist/"
+        "start": "yarn run compile && node src/"
     },
     "dependencies": {
         "@feathersjs/authentication": "^4.5.8",

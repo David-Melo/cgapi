@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify --poll src/",
     "compile": "shx rm -rf lib/ && tsc",
-    "start": "yarn run compile && node dist/",
+    "start": "yarn run compile && node src/",
     "taskforce": "taskforce -n 'jobs' --token a2f0b099-a6fa-4520-915b-bd3d9f5e1517 --passwd cgredis90008264a --port 2023"
   },
   "dependencies": {
