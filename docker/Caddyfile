@@ -3,7 +3,7 @@
 }
 
 api.canerogroup.com {
-    reverse_proxy :80 api:3030
+    reverse_proxy / api:3030
     reverse_proxy :2021 mongo:27017
     reverse_proxy :2022 postgres:5432
     reverse_proxy :2023 redis:6379
