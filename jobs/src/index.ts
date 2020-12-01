@@ -11,6 +11,8 @@ import { ListingCode, ListingType } from "./_types";
 
 dontenv.config();
 
+const API_SOCKET_URL = `http://${process.env.API_HOST}:${process.env.API_PORT}`;
+
 type QueryFunctions = {
     [key in ListingCode]: QueryFunction
 }
@@ -160,7 +162,7 @@ const QueryHandler: ProcessCallback = async () => {
 
 const ListingHandler: ProcessCallback = (id) => {
 
-    const socket = io(process.env.API_HOST, { transports: ['websocket'] });
+    const socket = io(API_SOCKET_URL, { transports: ['websocket'] });
     const app = feathers();
     app.configure(socketio(socket));
 
