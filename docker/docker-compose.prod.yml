@@ -58,7 +58,7 @@ services:
       - api
       - redis
     volumes:
-      - ../api:/opt/app
+      - ../jobs:/opt/app
     entrypoint: run "yarn start"
     networks:
       - api
