@@ -8,7 +8,7 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./node
       args:
         - NODE_ENV=${NODE_ENV}
     environment:
@@ -40,7 +40,7 @@ services:
 
   jobs:
     build:
-      context: ./api
+      context: ./node
       args:
         - NODE_ENV=${NODE_ENV}
     environment:

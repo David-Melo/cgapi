@@ -6,12 +6,71 @@ networks:
 
 services:
 
+  api:
+    build:
+      context: ./node
+      args:
+        - NODE_ENV=${NODE_ENV}
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASS: ${MONGO_PASS}
+      MONGO_DB: ${MONGO_DB}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_API_USER: ${POSTGRES_API_USER}
+      POSTGRES_API_PASS: ${POSTGRES_API_PASS}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASS: ${REDIS_PASS}
+      ALGOLIA_APP_ID: ${ALGOLIA_APP_ID}
+      ALGOLIA_API_KEY: ${ALGOLIA_API_KEY}
+      ALGOLIA_INDEX: ${ALGOLIA_INDEX}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../api:/opt/app
+    ports:
+      - 3030:3030
+    entrypoint: run "yarn start"
+    networks:
+      - api
+    tty: true
+    restart: always
+
+  jobs:
+    build:
+      context: ./node
+      args:
+        - NODE_ENV=${NODE_ENV}
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      ALGOLIA_APP_ID: ${ALGOLIA_APP_ID}
+      API_HOST: ${API_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASS: ${REDIS_PASS}
+    depends_on:
+      - api
+      - redis
+    volumes:
+      - ../api:/opt/app
+    ports:
+      - 3030:3030
+    entrypoint: run "yarn start"
+    networks:
+      - api
+    tty: true
+    restart: always
+
   caddy:
     image: caddy:2.1.1-alpine
     depends_on:
       - "mongo"
       - "postgres"
       - "redis"
+      - "api"
     restart: unless-stopped
     ports:
       - 80:80
