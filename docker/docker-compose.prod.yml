@@ -33,8 +33,6 @@ services:
       - redis
     volumes:
       - ../api:/opt/app
-    ports:
-      - 3030:3030
     entrypoint: run "yarn start"
     networks:
       - api
@@ -52,6 +50,7 @@ services:
       ALGOLIA_APP_ID: ${ALGOLIA_APP_ID}
       API_HOST: ${API_HOST}
       API_PORT: ${API_PORT}
+      REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASS: ${REDIS_PASS}
     depends_on:
