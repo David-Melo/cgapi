@@ -114,3 +114,5 @@ services:
       - ../data/redis:/bitnami/redis
     networks:
       - api
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASS}
