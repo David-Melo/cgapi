@@ -3,7 +3,7 @@ import dontenv from 'dotenv';
 import feathers from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
-import { format } from 'date-fns'
+import { sub, format } from 'date-fns'
 import { Queue, QueueBaseOptions, Worker, Job } from 'bullmq';
 
 import { ProcessRE1Query, ProcessRE2Query, ProcessRNTQuery, ProcessCOMQuery, ProcessCLDQuery, ProcessRLDQuery, ProcessRINQuery, ProcessBUSQuery, QueryFunction, ProcessBUSQueryBacklog, ProcessCLDQueryBacklog, ProcessCOMQueryBacklog, ProcessRE1QueryBacklog, ProcessRE2QueryBacklog, ProcessRINQueryBacklog, ProcessRLDQueryBacklog, ProcessRNTQueryBacklog, ProcessCleanUpQuery } from "./utils/functions";
@@ -12,6 +12,7 @@ import { ListingCode, ListingType } from "./_types";
 dontenv.config();
 
 const API_SOCKET_URL = `http://${process.env.API_HOST}:${process.env.API_PORT}`;
+const CRON_DAILY_SCHEDULE = '0 0 1 ? * * *'; // Daily At 1AM
 
 type QueryFunctions = {
     [key in ListingCode]: QueryFunction
@@ -59,18 +60,18 @@ const QueryHandler: ProcessCallback = async () => {
         'CLEANUP': ProcessCleanUpQuery
     }
 
-    const queryFunctionsBacklog: Omit<QueryFunctions, 'CLEANUP'> = {
-        'RE1': ProcessRE1QueryBacklog,
-        'RE2': ProcessRE2QueryBacklog,
-        'RNT': ProcessRNTQueryBacklog,
-        'COM': ProcessCOMQueryBacklog,
-        'CLD': ProcessCLDQueryBacklog,
-        'RLD': ProcessRLDQueryBacklog,
-        'RIN': ProcessRINQueryBacklog,
-        'BUS': ProcessBUSQueryBacklog,
-    }
+    // BackLog Queries                        
+    // const queryFunctionsBacklog: Omit<QueryFunctions, 'CLEANUP'> = {
+    //     'RE1': ProcessRE1QueryBacklog,
+    //     'RE2': ProcessRE2QueryBacklog,
+    //     'RNT': ProcessRNTQueryBacklog,
+    //     'COM': ProcessCOMQueryBacklog,
+    //     'CLD': ProcessCLDQueryBacklog,
+    //     'RLD': ProcessRLDQueryBacklog,
+    //     'RIN': ProcessRINQueryBacklog,
+    //     'BUS': ProcessBUSQueryBacklog,
+    // }
 
-    const QueryQueue = new Queue<QueryJobType>('queries', getConfig('QueryHandler'));
     const ListingQueue = new Queue<ListingJobType>('listings', getConfig('ListingsDispatcher'));
 
     const QueryWorker = new Worker<QueryJobType>('queries', async (job: Job<QueryJobType>) => {
@@ -88,9 +89,10 @@ const QueryHandler: ProcessCallback = async () => {
 
         updateProgress(5);
 
-        let queryFunction: QueryFunction = queryFunctionsBacklog[job.data.code];
+        let queryFunction: QueryFunction = queryFunctions[job.data.code];
 
-        let queryParam = job.data.type === 'daily' ? format(new Date(), 'yyyy-MM-dd'): null;
+        // If Daily, Set To Previous Day
+        let queryParam = job.data.type === 'daily' ? format(sub(new Date(), { days: 1 }), 'yyyy-MM-dd') : null;
 
         let queryListings = await queryFunction(queryParam);
 
@@ -132,27 +134,7 @@ const QueryHandler: ProcessCallback = async () => {
 
     QueryWorker.on('failed', (job: Job<QueryJobType>) => {
         log(`[${job.name}]: Job Failed`);
-    });
-
-    // QueryQueue.add( 'BackLogQuerySyncRE1', { code: 'RE1', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRE2', { code: 'RE2', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRNT', { code: 'RNT', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncCOM', { code: 'COM', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncCLD', { code: 'CLD', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRLD', { code: 'RLD', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncBUS', { code: 'BUS', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRIN', { code: 'RIN', type: "single", mode: 'insert' } );
-
-    // QueryQueue.add( 'DailyQuerySyncRE1', { code: 'RE1', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncRE2', { code: 'RE2', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncRNT', { code: 'RNT', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncCOM', { code: 'COM', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncCLD', { code: 'CLD', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncRLD', { code: 'RLD', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncBUS', { code: 'BUS', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-    // QueryQueue.add( 'DailyQuerySyncRIN', { code: 'RIN', type: 'daily', mode: 'insert' }, { repeat: { every: 86400000 } } );
-
-    //QueryQueue.add( 'DailyQuerySyncCleanup', { code: 'CLEANUP', type: 'daily', mode: 'delete' }, { repeat: { every: 86400000 } } );
+    });  
 
     process.on('beforeExit', () => {
         log(`Clean Up`);
