@@ -57,7 +57,11 @@ export default {
         create: [
             async (context: HookContext) => {
                 if (context.params.listing) {
-                    context.result = await context.app.service('algolia').create(context.params.listing);
+                    let listing = context.params.listing;
+                    if (listing._geoloc.lat === null || listing._geoloc.lng === null) {
+                        listing._geoloc = null
+                    }
+                    context.result = await context.app.service('algolia').create(listing);
                 }
             }
         ],
@@ -65,7 +69,11 @@ export default {
         patch: [
             async (context: HookContext) => {
                 if (context.params.listing) {
-                    context.result = await context.app.service('algolia').update(context.params.listing.mls, context.params.listing);
+                    let listing = context.params.listing;
+                    if (listing._geoloc.lat === null || listing._geoloc.lng === null) {
+                        listing._geoloc = null
+                    }
+                    context.result = await context.app.service('algolia').update(listing.mls, listing);
                 }
             }
         ],
