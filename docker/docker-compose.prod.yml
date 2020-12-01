@@ -77,8 +77,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./Caddyfile:/etc/Caddyfile
-      - ../data/caddy:/data
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ../data/caddy/data:/data
+      - ../data/caddy/config:/config
     networks:
       - api
 
