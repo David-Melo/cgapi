@@ -57,8 +57,6 @@ services:
       - redis
     volumes:
       - ../api:/opt/app
-    ports:
-      - 3030:3030
     entrypoint: run "yarn start"
     networks:
       - api
