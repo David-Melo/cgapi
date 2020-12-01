@@ -7,6 +7,7 @@ networks:
 services:
 
   api:
+    container_name: api
     build:
       context: ./node
       args:
@@ -41,6 +42,7 @@ services:
     restart: always
 
   jobs:
+    container_name: jobs
     build:
       context: ./node
       args:
@@ -64,6 +66,7 @@ services:
     restart: always
 
   caddy:
+    container_name: caddy
     image: caddy:2.1.1-alpine
     depends_on:
       - "mongo"
@@ -81,6 +84,7 @@ services:
       - api
 
   mongo:
+    container_name: mongo
     image: bitnami/mongodb:latest
     restart: always
     ports:
@@ -95,6 +99,7 @@ services:
       MONGODB_DATABASE: ${MONGO_DB}
 
   postgres:
+    container_name: pg
     image: postgres:12
     restart: always
     ports:
@@ -106,6 +111,7 @@ services:
       - api
 
   redis:
+    container_name: redis
     image: bitnami/redis:latest
     restart: always
     ports:
