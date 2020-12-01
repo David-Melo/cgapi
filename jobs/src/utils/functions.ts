@@ -29,7 +29,7 @@ export const ProcessCleanUpQuery: QueryFunction = async (dateToQuery): Promise<L
 // General Daily Queries
 export const ProcessRE1Query: QueryFunction = async (dateToQuery): Promise<RE1[]> => {
 
-    let query = prepareQuery([ActiveQuery, CountyQuery, RE1Query, getDateQuery(dateToQuery)], [GenericFields, RE1Fields], 10);
+    let query = prepareQuery([ActiveQuery, CountyQuery, RE1Query, getDateQuery(dateToQuery)], [GenericFields, RE1Fields], QUERY_PAGE_SIZE);
     
     const API = new APIService();
 
