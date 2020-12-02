@@ -181,6 +181,10 @@ const ListingHandler: ProcessCallback = (id) => {
             return listing;
 
         } catch (e) {
+            if (e.code===404) {
+                job.updateProgress(100);
+                return Promise.resolve(e.message);
+            }
             return Promise.reject(e);
         }
 
