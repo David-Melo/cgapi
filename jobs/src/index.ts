@@ -181,7 +181,7 @@ const ListingHandler: ProcessCallback = (id) => {
             return listing;
 
         } catch (e) {
-            return Promise.reject(e.message);
+            return Promise.reject(e);
         }
 
     }, getConfig(workerId));
