@@ -79,6 +79,7 @@ export default {
         ],
         remove: [
             async (context: HookContext) => {
+                console.log('passingtoalgolia',context.params);
                 context.result = await context.app.service('algolia').remove(context.params.query.mls);
             }
         ]

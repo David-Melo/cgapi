@@ -48,7 +48,15 @@ export class Algolia implements ServiceMethods<any> {
     }
 
     async remove(id: NullableId, params: Params) {
-        return this.index.deleteObject(id.toString());
+        console.log('removeaction',id);
+        try {
+            let res = await this.index.deleteObject(id.toString());
+            return res;
+        } catch (e) {
+            console.log(e);
+            return Promise.reject(e);
+        }
+        
     }
 
 }
