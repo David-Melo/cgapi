@@ -2,6 +2,10 @@
     email davidmelo@desmdesigns.com
 }
 
+cms.canerogroup.com {
+    reverse_proxy cms:1337
+}
+
 api.canerogroup.com {
     reverse_proxy api:3030
 }
