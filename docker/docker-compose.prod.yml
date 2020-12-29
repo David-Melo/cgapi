@@ -10,6 +10,7 @@ services:
     container_name: cms
     image: strapi/strapi
     environment:
+      NODE_ENV: ${NODE_ENV}
       DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
       AUTHENTICATION_DATABASE: ${MONGO_DB}
       DATABASE_NAME: ${MONGO_DB}
@@ -28,6 +29,7 @@ services:
     depends_on:
       - mongo
     restart: always
+    command: 'strapi start'
 
   api:
     container_name: api
