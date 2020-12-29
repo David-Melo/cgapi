@@ -17,8 +17,7 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify --poll src/",
     "compile": "shx rm -rf dist/ && tsc",
-    "start": "yarn run compile && node dist/",
-    "taskforce": "taskforce -n 'jobs' --token a2f0b099-a6fa-4520-915b-bd3d9f5e1517 --passwd cgredis90008264a --port 2023"
+    "start": "yarn run compile && node dist/"
   },
   "dependencies": {
     "@feathersjs/feathers": "^4.5.8",
