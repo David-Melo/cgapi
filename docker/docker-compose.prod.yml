@@ -7,6 +7,7 @@ networks:
 services:
 
   cms:
+    container_name: cms
     image: strapi/strapi
     environment:
       DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
