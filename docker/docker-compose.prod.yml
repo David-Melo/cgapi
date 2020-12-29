@@ -9,7 +9,8 @@ services:
   cms:
     container_name: cms
     build:
-      context: ./cms
+      dockerfile: ./cms/Dockerfile
+      context: ../cms
     environment:
       NODE_ENV: ${NODE_ENV}
       DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
