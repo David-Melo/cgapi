@@ -8,7 +8,8 @@ services:
 
   cms:
     container_name: cms
-    image: strapi/strapi
+    build:
+      context: ./cms
     environment:
       NODE_ENV: ${NODE_ENV}
       DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
@@ -29,7 +30,6 @@ services:
     depends_on:
       - mongo
     restart: always
-    command: 'strapi start'
 
   api:
     container_name: api
