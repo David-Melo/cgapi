@@ -11,8 +11,9 @@ COPY . .
 
 ENV NODE_ENV production
 
-RUN yarn build
 
 EXPOSE 1337
 
-CMD ["yarn", "start"]
+RUN chmod a+x /srv/app/run.sh
+
+CMD ["/srv/app/run.sh"]
