@@ -1,0 +1,50 @@
+{
+  "kind": "singleType",
+  "collectionName": "cg_agents",
+  "info": {
+    "name": "agents"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "title": {
+      "type": "string",
+      "default": "Sales Associate",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "listed": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "image": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true
+    }
+  }
+}
