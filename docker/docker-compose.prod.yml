@@ -9,7 +9,7 @@ services:
   cms:
     container_name: cms
     build:
-      dockerfile: ./cms/Dockerfile
+      dockerfile: ../docker/cms/Dockerfile
       context: ../cms
     environment:
       NODE_ENV: ${NODE_ENV}

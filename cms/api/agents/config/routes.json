@@ -9,8 +9,32 @@
       }
     },
     {
-      "method": "PUT",
+      "method": "GET",
+      "path": "/agents/count",
+      "handler": "agents.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/:id",
+      "handler": "agents.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
       "path": "/agents",
+      "handler": "agents.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agents/:id",
       "handler": "agents.update",
       "config": {
         "policies": []
@@ -18,7 +42,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/agents",
+      "path": "/agents/:id",
       "handler": "agents.delete",
       "config": {
         "policies": []

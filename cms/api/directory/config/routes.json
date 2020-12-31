@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/directory",
+      "handler": "directory.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/directory",
+      "handler": "directory.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/directory",
+      "handler": "directory.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

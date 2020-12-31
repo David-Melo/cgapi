@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_directory_listed_agents",
+  "info": {
+    "name": "Listed Agents",
+    "icon": "address-card"
+  },
+  "options": {},
+  "attributes": {
+    "agents": {
+      "collection": "agents"
+    }
+  }
+}

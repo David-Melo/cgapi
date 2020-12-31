@@ -105,6 +105,7 @@ services:
   cms:
     image: strapi/strapi
     environment:
+      NODE_ENV: ${NODE_ENV}
       DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
       AUTHENTICATION_DATABASE: ${MONGO_DB}
       DATABASE_NAME: ${MONGO_DB}
@@ -112,6 +113,10 @@ services:
       DATABASE_PORT: ${MONGO_PORT}
       DATABASE_USERNAME: ${MONGO_USER}
       DATABASE_PASSWORD: ${MONGO_PASS}
+      STRAPI_HOST: ${STRAPI_HOST}
+      STRAPI_PORT: ${STRAPI_PORT}
+      STRAPI_JWT_SECRET: ${STRAPI_JWT_SECRET}
+      STRAPI_URL: ${STRAPI_URL}
     volumes:
       - ../cms:/srv/app
     networks:

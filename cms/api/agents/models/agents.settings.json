@@ -1,8 +1,9 @@
 {
-  "kind": "singleType",
+  "kind": "collectionType",
   "collectionName": "cg_agents",
   "info": {
-    "name": "agents"
+    "name": "agents",
+    "description": ""
   },
   "options": {
     "increments": true,
