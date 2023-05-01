@@ -48,29 +48,29 @@ const QueryHandler: ProcessCallback = async () => {
         console.log(`[QueryHandler]: ${msg}`);
     }
 
-    const queryFunctions: QueryFunctions = {
-        'RE1': ProcessRE1Query,
-        'RE2': ProcessRE2Query,
-        'RNT': ProcessRNTQuery,
-        'COM': ProcessCOMQuery,
-        'CLD': ProcessCLDQuery,
-        'RLD': ProcessRLDQuery,
-        'RIN': ProcessRINQuery,
-        'BUS': ProcessBUSQuery,
-        'CLEANUP': ProcessCleanUpQuery
-    }
+    //const queryFunctions: QueryFunctions = {
+    //    'RE1': ProcessRE1Query,
+    //    'RE2': ProcessRE2Query,
+    //    'RNT': ProcessRNTQuery,
+    //    'COM': ProcessCOMQuery,
+    //    'CLD': ProcessCLDQuery,
+    //    'RLD': ProcessRLDQuery,
+    //    'RIN': ProcessRINQuery,
+    //    'BUS': ProcessBUSQuery,
+    //    'CLEANUP': ProcessCleanUpQuery
+    //}
 
     // BackLog Queries                        
-    // const queryFunctionsBacklog: Omit<QueryFunctions, 'CLEANUP'> = {
-    //     'RE1': ProcessRE1QueryBacklog,
-    //     'RE2': ProcessRE2QueryBacklog,
-    //     'RNT': ProcessRNTQueryBacklog,
-    //     'COM': ProcessCOMQueryBacklog,
-    //     'CLD': ProcessCLDQueryBacklog,
-    //     'RLD': ProcessRLDQueryBacklog,
-    //     'RIN': ProcessRINQueryBacklog,
-    //     'BUS': ProcessBUSQueryBacklog,
-    // }
+     const queryFunctions: Omit<QueryFunctions, 'CLEANUP'> = {
+         'RE1': ProcessRE1QueryBacklog,
+         'RE2': ProcessRE2QueryBacklog,
+         'RNT': ProcessRNTQueryBacklog,
+         'COM': ProcessCOMQueryBacklog,
+         'CLD': ProcessCLDQueryBacklog,
+         'RLD': ProcessRLDQueryBacklog,
+         'RIN': ProcessRINQueryBacklog,
+         'BUS': ProcessBUSQueryBacklog,
+    }
 
     const ListingQueue = new Queue<ListingJobType>('listings', getConfig('ListingsDispatcher'));
 
