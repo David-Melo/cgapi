@@ -25,13 +25,4 @@ const QueueDailySchedule = () => {
 
 };
 
-const QueueBacklogSync = () => {
-    // QueryQueue.add( 'BackLogQuerySyncRE1', { code: 'RE1', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRE2', { code: 'RE2', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRNT', { code: 'RNT', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncCOM', { code: 'COM', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncCLD', { code: 'CLD', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRLD', { code: 'RLD', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncBUS', { code: 'BUS', type: "single", mode: 'insert' } );
-    // QueryQueue.add( 'BackLogQuerySyncRIN', { code: 'RIN', type: "single", mode: 'insert' } );
-}
+QueueDailySchedule()
